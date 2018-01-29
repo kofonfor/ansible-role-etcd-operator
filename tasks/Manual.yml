@@ -1,0 +1,20 @@
+- name: checkout etcd-operator
+  git: repo=https://github.com/coreos/etcd-operator.git dest=/root/etcd-operator
+
+- name: check if RBAC roles exist
+  shell: kubectl get clusterrole --namespace=tntclub | grep etcd-operator
+  register: result
+  ignore_errors: true
+
+- name: install RBAC roles
+  shell: cd /root/etcd-operator && example/rbac/create_role.sh --namespace={{ etcd_operator_namespace }}
+  when: result|failed
+
+- name: check if Operator exist
+  shell: kubectl get deploy --namespace=tntclub | grep etcd-operator
+  register: result
+  ignore_errors: true
+
+- name: deploy the Operator
+  shell: cd /root/etcd-operator && kubectl create --namespace={{ etcd_operator_namespace }} -f example/deployment.yaml
+  when: result|failed

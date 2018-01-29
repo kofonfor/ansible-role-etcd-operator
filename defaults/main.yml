@@ -1,0 +1,2 @@
+etcd_operator_namespace: default
+etcd_operator_use_helm: true

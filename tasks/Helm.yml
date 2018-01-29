@@ -1,0 +1,2 @@
+- name: install etcd-operator using a Helm chart
+  shell: helm install stable/etcd-operator --namespace {{ etcd_operator_namespace }} --name my-release

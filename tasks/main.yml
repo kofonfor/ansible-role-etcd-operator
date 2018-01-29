@@ -1,0 +1,5 @@
+- include_tasks: Helm.yml
+  when: etcd_operator_use_helm
+
+- include_tasks: Manual.yml
+  when: not etcd_operator_use_helm
