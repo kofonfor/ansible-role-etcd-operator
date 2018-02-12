@@ -1,2 +1,14 @@
+- name: put /root/etcd-operator-config.yaml
+  template: src=etcd-operator-config.yaml dest=/root/etcd-operator-config.yaml
+
+- name: check if a Helm release for etcd-operator is present
+  shell: helm list --namespace={{ etcd_operator_namespace }} | grep etcd-operator-release
+  register: result
+  ignore_errors: true
+
+- name: clone the repo
+  git: repo=https://github.com/alexclear/charts.git dest=/root/charts
+
 - name: install etcd-operator using a Helm chart
-  shell: helm install stable/etcd-operator --namespace {{ etcd_operator_namespace }} --name my-release
+  shell: cd /root/charts/stable && helm install -f /root/etcd-operator-config.yaml etcd-operator --namespace {{ etcd_operator_namespace }} --name etcd-operator-release
+  when: result|failed

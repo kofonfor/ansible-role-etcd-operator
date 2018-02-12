@@ -1,0 +1,4 @@
+customResources:
+  createEtcdClusterCRD: false
+  createBackupCRD: false
+  createRestoreCRD: false
